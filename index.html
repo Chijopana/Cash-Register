@@ -1,16 +1,71 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Register</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caja Registradora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Cash Register</h1>
-    <input type="number" id="cash" placeholder="Enter cash amount...">
-    <button id="purchase-btn">Purchase</button>
-    <p id="change-due"></p>
-
-    <script src="script.js"></script>
+ 
+<div class="unit">
+  <div class="plate">
+    <div class="rivet-row"><span class="rivet"></span><span class="rivet"></span></div>
+    <h1>Registradora</h1>
+    <div class="sub">Modelo No. 1 &middot; Precisión al centavo</div>
+  </div>
+ 
+  <div class="register">
+    <div class="screen">
+      <div class="screen-row">
+        <span class="screen-label">Total a pagar</span>
+        <span class="screen-value" id="price-display">$19.50</span>
+      </div>
+      <div class="screen-row">
+        <span class="screen-label">Entregado</span>
+        <span class="screen-value dim" id="cash-display">$0.00</span>
+      </div>
+      <hr>
+      <div class="screen-row">
+        <span class="screen-label">Cambio</span>
+        <span class="screen-value" id="change-display">$0.00</span>
+      </div>
+      <div class="status-line status-idle" id="status-line">Esperando pago</div>
+    </div>
+ 
+    <div class="input-row">
+      <div class="cash-input-wrap">
+        <input type="number" id="cash" step="0.01" min="0" placeholder="0.00">
+      </div>
+      <button id="purchase-btn">COBRAR</button>
+    </div>
+ 
+    <div class="drawer-shell">
+      <div class="drawer-face"></div>
+      <div class="drawer" id="drawer">
+        <div class="bins" id="bins"></div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="receipt-wrap" id="receipt-wrap">
+    <div class="receipt">
+      <div class="receipt-title">*** RECIBO ***</div>
+      <div class="receipt-line"><span>Precio</span><span id="rc-price">$19.50</span></div>
+      <div class="receipt-line"><span>Pagado</span><span id="rc-cash">$0.00</span></div>
+      <hr>
+      <div class="receipt-line"><span><strong>Cambio</strong></span><span id="rc-change"><strong>$0.00</strong></span></div>
+      <div id="rc-breakdown"></div>
+      <div class="receipt-foot">GRACIAS POR SU COMPRA</div>
+    </div>
+  </div>
+ 
+  <footer>Cajón blindado · Cuenta exacta garantizada</footer>
+</div>
+ 
+<script src="script.js"></script>
 </body>
 </html>
