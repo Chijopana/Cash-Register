@@ -3,27 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caja Registradora</title>
+<title>Caja Registradora v2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+body.dark-mode {
+  --till-green: #0a2a1f;
+  --till-green-dark: #051812;
+  --till-green-light: #0d3d2d;
+  --paper: #e5ddd0;
+  --paper-dark: #d1c7b5;
+  --ink: #2a2620;
+}
+ 
+.quick-buttons, .keypad, .stats, .history {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--till-green-light);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 8px rgba(0,0,0,.3);
+}
+ 
+.quick-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+ 
+.quick-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass) 60%, #8f6a2c 100%);
+  color: #2c1904;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .1s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,.3);
+}
+ 
+.quick-btn:hover { filter: brightness(1.1); }
+.quick-btn:active { transform: translateY(2px); box-shadow: 0 1px 2px rgba(0,0,0,.3); }
+ 
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+ 
+.stat-card {
+  background: rgba(255,255,255,.05);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(184,135,59,.2);
+  text-align: center;
+}
+ 
+.stat-label {
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: #4a6b5a;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+ 
+.stat-value {
+  font-family: 'VT323', monospace;
+  font-size: 24px;
+  color: var(--led-amber);
+  text-shadow: 0 0 8px rgba(255,176,32,.65);
+}
+ 
+.history {
+  max-height: 200px;
+  overflow-y: auto;
+}
+ 
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  font-size: 12px;
+  border-bottom: 1px dashed #1f352c;
+  color: var(--paper);
+  font-family: 'Space Mono', monospace;
+}
+ 
+.history-item:last-child { border-bottom: none; }
+ 
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+ 
+.control-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s ease;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+ 
+.control-btn.undo {
+  background: #3b8abd;
+  color: white;
+}
+ 
+.control-btn.reset {
+  background: #b85c3d;
+  color: white;
+}
+ 
+.control-btn.dark {
+  background: #6b4d1f;
+  color: var(--led-amber);
+}
+ 
+.control-btn.sound {
+  background: #3d5838;
+  color: var(--led-amber);
+}
+ 
+.control-btn:hover { filter: brightness(1.1); }
+.control-btn:active { transform: translateY(2px); }
+ 
+.price-adjustment {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+ 
+.price-adjustment input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #08251b;
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  outline: none;
+}
+ 
+.price-adjustment input:focus {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(184,135,59,.2);
+}
+ 
+.price-adjustment span {
+  font-size: 12px;
+  color: #4a6b5a;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+}
+</style>
 </head>
 <body>
  
-  
 <div class="unit">
   <div class="plate">
     <div class="rivet-row"><span class="rivet"></span><span class="rivet"></span></div>
-    <h1>Registradora</h1>
-    <div class="sub">Modelo No. 1 &middot; Precisión al centavo</div>
+    <h1>Registradora 2.0</h1>
+    <div class="sub">Modelo avanzado · Interfaz interactiva</div>
   </div>
  
   <div class="register">
+    <!-- Price adjustment -->
+    <div class="price-adjustment">
+      <span>Precio:</span>
+      <input type="number" id="price-input" step="0.01" min="0.01" value="19.50">
+      <span id="price-display">$19.50</span>
+    </div>
+ 
+    <!-- Main screen -->
     <div class="screen">
       <div class="screen-row">
         <span class="screen-label">Total a pagar</span>
-        <span class="screen-value" id="price-display">$19.50</span>
+        <span class="screen-value" id="total-display">$19.50</span>
       </div>
       <div class="screen-row">
         <span class="screen-label">Entregado</span>
@@ -37,6 +210,7 @@
       <div class="status-line status-idle" id="status-line">Esperando pago</div>
     </div>
  
+    <!-- Input row -->
     <div class="input-row">
       <div class="cash-input-wrap">
         <input type="number" id="cash" step="0.01" min="0" placeholder="0.00">
@@ -44,14 +218,33 @@
       <button id="purchase-btn">COBRAR</button>
     </div>
  
+    <!-- Quick buttons -->
+    <div class="quick-buttons" id="quick-buttons"></div>
+ 
+    <!-- Drawer -->
     <div class="drawer-shell">
       <div class="drawer-face"></div>
       <div class="drawer" id="drawer">
         <div class="bins" id="bins"></div>
       </div>
     </div>
+ 
+    <!-- Stats -->
+    <div class="stats" id="stats"></div>
+ 
+    <!-- History -->
+    <div class="history" id="history"></div>
+ 
+    <!-- Controls -->
+    <div class="controls">
+      <button class="control-btn undo" id="undo-btn">↶ Deshacer</button>
+      <button class="control-btn reset" id="reset-btn">⟳ Reset</button>
+      <button class="control-btn dark" id="toggle-dark">🌙 Tema</button>
+      <button class="control-btn sound" id="toggle-sound">🔊 Sonido</button>
+    </div>
   </div>
  
+  <!-- Receipt -->
   <div class="receipt-wrap" id="receipt-wrap">
     <div class="receipt">
       <div class="receipt-title">*** RECIBO ***</div>
@@ -64,9 +257,10 @@
     </div>
   </div>
  
-  <footer>Cajón blindado · Cuenta exacta garantizada</footer>
+  <footer>Cajón blindado · Cuenta exacta garantizada · v2.0</footer>
 </div>
  
 <script src="script.js"></script>
 </body>
 </html>
+ 

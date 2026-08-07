@@ -33,7 +33,6 @@ body{
   max-width:460px;
 }
  
-/* Brand plate */
 .plate{
   text-align:center;
   margin-bottom:14px;
@@ -66,7 +65,6 @@ body{
   text-transform:uppercase;
 }
  
-/* Register body */
 .register{
   background:linear-gradient(180deg, var(--till-green-light) 0%, var(--till-green) 55%, var(--till-green-dark) 100%);
   border-radius:18px;
@@ -87,7 +85,6 @@ body{
   pointer-events:none;
 }
  
-/* LED display panel */
 .screen{
   background:#0a1410;
   border-radius:8px;
@@ -133,7 +130,6 @@ body{
 .status-insufficient{ color:#ff8a5b; text-shadow:0 0 6px rgba(255,138,91,.5); }
 .status-idle{ color:#3a5548; }
  
-/* Input row */
 .input-row{
   display:flex;
   gap:10px;
@@ -169,7 +165,6 @@ body{
 }
 #cash::placeholder{ color:#9a9282; font-weight:400; }
  
-/* Purchase button */
 #purchase-btn{
   position:relative;
   border:none;
@@ -197,7 +192,6 @@ body{
   transform:none;
 }
  
-/* Drawer */
 .drawer-shell{
   background:#08251b;
   border-radius:0 0 10px 10px;
@@ -276,7 +270,6 @@ body{
   100%{ transform:scale(1); }
 }
  
-/* Receipt */
 .receipt-wrap{
   margin-top:16px;
   display:flex;
@@ -327,3 +320,4 @@ footer{
   color:#4a5a52;
   text-transform:uppercase;
 }
+ 
