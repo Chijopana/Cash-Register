@@ -1,266 +1,153 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caja Registradora v2.0</title>
+<meta name="description" content="Caja registradora interactiva: calcula el cambio exacto, controla el inventario del cajón e imprime el recibo.">
+<meta name="color-scheme" content="dark light">
+<title>Caja Registradora</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💵</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<style>
-body.dark-mode {
-  --till-green: #0a2a1f;
-  --till-green-dark: #051812;
-  --till-green-light: #0d3d2d;
-  --paper: #e5ddd0;
-  --paper-dark: #d1c7b5;
-  --ink: #2a2620;
-}
- 
-.quick-buttons, .keypad, .stats, .history {
-  margin-top: 20px;
-  padding: 16px;
-  background: var(--till-green-light);
-  border-radius: 12px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 4px 8px rgba(0,0,0,.3);
-}
- 
-.quick-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
- 
-.quick-btn {
-  flex: 1;
-  min-width: 70px;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass) 60%, #8f6a2c 100%);
-  color: #2c1904;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all .1s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,.3);
-}
- 
-.quick-btn:hover { filter: brightness(1.1); }
-.quick-btn:active { transform: translateY(2px); box-shadow: 0 1px 2px rgba(0,0,0,.3); }
- 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-}
- 
-.stat-card {
-  background: rgba(255,255,255,.05);
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(184,135,59,.2);
-  text-align: center;
-}
- 
-.stat-label {
-  font-size: 11px;
-  letter-spacing: .2em;
-  color: #4a6b5a;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
- 
-.stat-value {
-  font-family: 'VT323', monospace;
-  font-size: 24px;
-  color: var(--led-amber);
-  text-shadow: 0 0 8px rgba(255,176,32,.65);
-}
- 
-.history {
-  max-height: 200px;
-  overflow-y: auto;
-}
- 
-.history-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
-  font-size: 12px;
-  border-bottom: 1px dashed #1f352c;
-  color: var(--paper);
-  font-family: 'Space Mono', monospace;
-}
- 
-.history-item:last-child { border-bottom: none; }
- 
-.controls {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-  flex-wrap: wrap;
-}
- 
-.control-btn {
-  flex: 1;
-  min-width: 100px;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all .15s ease;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
- 
-.control-btn.undo {
-  background: #3b8abd;
-  color: white;
-}
- 
-.control-btn.reset {
-  background: #b85c3d;
-  color: white;
-}
- 
-.control-btn.dark {
-  background: #6b4d1f;
-  color: var(--led-amber);
-}
- 
-.control-btn.sound {
-  background: #3d5838;
-  color: var(--led-amber);
-}
- 
-.control-btn:hover { filter: brightness(1.1); }
-.control-btn:active { transform: translateY(2px); }
- 
-.price-adjustment {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 14px;
-}
- 
-.price-adjustment input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 2px solid #08251b;
-  border-radius: 6px;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'Space Mono', monospace;
-  font-weight: 700;
-  font-size: 14px;
-  outline: none;
-}
- 
-.price-adjustment input:focus {
-  border-color: var(--brass);
-  box-shadow: 0 0 0 2px rgba(184,135,59,.2);
-}
- 
-.price-adjustment span {
-  font-size: 12px;
-  color: #4a6b5a;
-  text-transform: uppercase;
-  letter-spacing: .2em;
-}
-</style>
 </head>
 <body>
- 
-<div class="unit">
-  <div class="plate">
-    <div class="rivet-row"><span class="rivet"></span><span class="rivet"></span></div>
-    <h1>Registradora 2.0</h1>
-    <div class="sub">Modelo avanzado · Interfaz interactiva</div>
+
+<a class="skip-link" href="#terminal">Saltar al terminal de cobro</a>
+
+<div class="shell">
+
+  <header class="plate">
+    <div class="rivet-row" aria-hidden="true"><span class="rivet"></span><span class="rivet"></span></div>
+    <h1>Registradora</h1>
+    <p class="sub">Punto de venta · cambio exacto garantizado</p>
+  </header>
+
+  <div class="layout">
+
+    <!-- ══════════════ TERMINAL DE COBRO ══════════════ -->
+    <section class="panel register" id="terminal" aria-labelledby="terminal-title">
+      <h2 class="sr-only" id="terminal-title">Terminal de cobro</h2>
+
+      <div class="price-row">
+        <label for="price-input">Precio</label>
+        <div class="field">
+          <span class="field-prefix" aria-hidden="true">$</span>
+          <!-- type="text": un input number sanea "12." a cadena vacía y el
+               teclado numérico no podría escribir el punto decimal. -->
+          <input type="text" id="price-input" inputmode="decimal"
+                 pattern="[0-9]*[.,]?[0-9]*" value="19.50" autocomplete="off"
+                 aria-describedby="price-hint">
+          <span class="sr-only" id="price-hint">Importe a cobrar por el artículo</span>
+        </div>
+      </div>
+
+      <div class="screen">
+        <div class="screen-row">
+          <span class="screen-label">Total</span>
+          <span class="screen-value" id="total-display">$19.50</span>
+        </div>
+        <div class="screen-row">
+          <span class="screen-label">Entregado</span>
+          <span class="screen-value dim" id="cash-display">$0.00</span>
+        </div>
+        <hr>
+        <div class="screen-row">
+          <span class="screen-label">Cambio</span>
+          <span class="screen-value dim" id="change-display">$0.00</span>
+        </div>
+        <p class="status-line is-idle" id="status-line" role="status" aria-live="polite">Esperando pago</p>
+      </div>
+
+      <div class="input-row">
+        <label class="sr-only" for="cash">Efectivo recibido</label>
+        <div class="field field--lg">
+          <span class="field-prefix" aria-hidden="true">$</span>
+          <input type="text" id="cash" inputmode="decimal"
+                 pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00" autocomplete="off">
+        </div>
+        <button type="button" class="btn-charge" id="purchase-btn" disabled>Cobrar</button>
+      </div>
+
+      <div class="quick-buttons" id="quick-buttons" role="group" aria-label="Añadir billetes recibidos"></div>
+
+      <div class="keypad" id="keypad" role="group" aria-label="Teclado numérico"></div>
+
+      <div class="controls">
+        <button type="button" class="control-btn control-btn--undo" id="undo-btn" disabled>
+          <span class="ctrl-icon" aria-hidden="true">↶</span><span class="ctrl-label">Deshacer</span>
+        </button>
+        <button type="button" class="control-btn control-btn--reset" id="reset-btn">
+          <span class="ctrl-icon" aria-hidden="true">⟳</span><span class="ctrl-label">Reiniciar</span>
+        </button>
+        <button type="button" class="control-btn control-btn--theme" id="toggle-theme" aria-pressed="false">
+          <span class="ctrl-icon" aria-hidden="true">🌙</span><span class="ctrl-label">Oscuro</span>
+        </button>
+        <button type="button" class="control-btn control-btn--sound" id="toggle-sound" aria-pressed="true">
+          <span class="ctrl-icon" aria-hidden="true">🔊</span><span class="ctrl-label">Sonido</span>
+        </button>
+      </div>
+
+      <p class="hint">
+        <kbd>Enter</kbd> cobra · <kbd>Esc</kbd> limpia · <kbd>Ctrl</kbd>+<kbd>Z</kbd> deshace
+      </p>
+    </section>
+
+    <!-- ══════════════ CAJÓN, RESUMEN E HISTORIAL ══════════════ -->
+    <div class="side">
+
+      <section class="panel" aria-labelledby="drawer-title">
+        <div class="panel-head">
+          <h2 id="drawer-title">Cajón</h2>
+          <span class="panel-total" id="drawer-total">$335.41</span>
+        </div>
+        <div class="drawer" id="drawer">
+          <div class="bins" id="bins"></div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="stats-title">
+        <h2 class="sr-only" id="stats-title">Resumen de la jornada</h2>
+        <div class="stats" id="stats"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="history-title">
+        <div class="panel-head">
+          <h2 id="history-title">Historial</h2>
+          <button type="button" class="link-btn" id="clear-history" hidden>Vaciar</button>
+        </div>
+        <div class="history" id="history"></div>
+      </section>
+
+      <!-- El corrector de freeCodeCamp lee el textContent de #change-due -->
+      <div class="receipt-wrap" id="receipt-wrap" hidden>
+        <article class="receipt" id="change-due" aria-label="Recibo de la última venta">
+          <header class="receipt-head">
+            <p class="receipt-title">Registradora</p>
+            <p class="receipt-meta" id="rc-time">--:--:--</p>
+          </header>
+          <div class="receipt-line"><span>Precio</span><span id="rc-price">$0.00</span></div>
+          <div class="receipt-line"><span>Entregado</span><span id="rc-cash">$0.00</span></div>
+          <hr>
+          <div class="receipt-line receipt-line--total"><span>Cambio</span><span id="rc-change">$0.00</span></div>
+          <div id="rc-breakdown"></div>
+          <p class="receipt-status is-ok" id="rc-status"></p>
+          <p class="receipt-foot">Gracias por su compra</p>
+          <span class="sr-only" id="rc-machine" aria-hidden="true"></span>
+        </article>
+        <div class="receipt-actions">
+          <button type="button" class="link-btn" id="print-btn">Imprimir</button>
+          <button type="button" class="link-btn" id="close-receipt">Cerrar</button>
+        </div>
+      </div>
+
+    </div>
   </div>
- 
-  <div class="register">
-    <!-- Price adjustment -->
-    <div class="price-adjustment">
-      <span>Precio:</span>
-      <input type="number" id="price-input" step="0.01" min="0.01" value="19.50">
-      <span id="price-display">$19.50</span>
-    </div>
- 
-    <!-- Main screen -->
-    <div class="screen">
-      <div class="screen-row">
-        <span class="screen-label">Total a pagar</span>
-        <span class="screen-value" id="total-display">$19.50</span>
-      </div>
-      <div class="screen-row">
-        <span class="screen-label">Entregado</span>
-        <span class="screen-value dim" id="cash-display">$0.00</span>
-      </div>
-      <hr>
-      <div class="screen-row">
-        <span class="screen-label">Cambio</span>
-        <span class="screen-value" id="change-display">$0.00</span>
-      </div>
-      <div class="status-line status-idle" id="status-line">Esperando pago</div>
-    </div>
- 
-    <!-- Input row -->
-    <div class="input-row">
-      <div class="cash-input-wrap">
-        <input type="number" id="cash" step="0.01" min="0" placeholder="0.00">
-      </div>
-      <button id="purchase-btn">COBRAR</button>
-    </div>
- 
-    <!-- Quick buttons -->
-    <div class="quick-buttons" id="quick-buttons"></div>
- 
-    <!-- Drawer -->
-    <div class="drawer-shell">
-      <div class="drawer-face"></div>
-      <div class="drawer" id="drawer">
-        <div class="bins" id="bins"></div>
-      </div>
-    </div>
- 
-    <!-- Stats -->
-    <div class="stats" id="stats"></div>
- 
-    <!-- History -->
-    <div class="history" id="history"></div>
- 
-    <!-- Controls -->
-    <div class="controls">
-      <button class="control-btn undo" id="undo-btn">↶ Deshacer</button>
-      <button class="control-btn reset" id="reset-btn">⟳ Reset</button>
-      <button class="control-btn dark" id="toggle-dark">🌙 Tema</button>
-      <button class="control-btn sound" id="toggle-sound">🔊 Sonido</button>
-    </div>
-  </div>
- 
-  <!-- Receipt -->
-  <div class="receipt-wrap" id="receipt-wrap">
-    <div class="receipt">
-      <div class="receipt-title">*** RECIBO ***</div>
-      <div class="receipt-line"><span>Precio</span><span id="rc-price">$19.50</span></div>
-      <div class="receipt-line"><span>Pagado</span><span id="rc-cash">$0.00</span></div>
-      <hr>
-      <div class="receipt-line"><span><strong>Cambio</strong></span><span id="rc-change"><strong>$0.00</strong></span></div>
-      <div id="rc-breakdown"></div>
-      <div class="receipt-foot">GRACIAS POR SU COMPRA</div>
-    </div>
-  </div>
- 
-  <footer>Cajón blindado · Cuenta exacta garantizada · v2.0</footer>
+
+  <footer>Cambio calculado en centavos enteros · sin errores de redondeo</footer>
 </div>
- 
+
 <script src="script.js"></script>
 </body>
 </html>
- 
